@@ -1,3 +1,26 @@
+# EquineLead · Analítica de leads
+
+Proyecto colaborativo de No Country. El README del equipo identifica a Dody Dueñas como Data Analyst.
+
+**Para revisar:** `app/modules, src, docs, README.md`.
+
+**Contexto:** Preservar la autoría colectiva y el rol individual. Los modelos, DVC y servicios externos necesitan sus datos, artefactos y configuración.
+
+## Inicio
+
+Desde la raíz del repositorio, en un entorno virtual con sus datos disponibles:
+
+```bash
+python -m pip install -r app/requirements.txt
+python -m streamlit run app/app.py
+```
+
+Consulta [el caso de proyecto](docs/PORTFOLIO_CASE.md) para el alcance y los criterios de revisión.
+
+---
+
+## Documentación detallada existente
+
 ![banner](./assets/equinelead_logo_github.jpg)
 
 # EquineLead: Data-Driven Growth Engine for the Horse Industry
