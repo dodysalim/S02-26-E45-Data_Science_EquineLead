@@ -21,7 +21,16 @@ def pull_data():
     import json
     import tempfile
 
-    creds_dict = dict(st.secrets["gcp"])
+    local_data = os.path.join(os.path.dirname(__file__), "data", "clean")
+    required = ("horses_listings_limpio.parquet", "products_listing_limpio.parquet",
+                "horses_sessions_info.parquet", "prods_sessions_info.parquet", "users_info.parquet")
+    if all(os.path.isfile(os.path.join(local_data, name)) for name in required):
+        return
+    try:
+        creds_dict = dict(st.secrets["gcp"])
+    except (FileNotFoundError, KeyError, st.errors.StreamlitSecretNotFoundError):
+        st.info("Configure las credenciales GCP en Streamlit Secrets o descargue los datos DVC en app/data/clean para abrir el dashboard.")
+        st.stop()
 
     tmp = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
     json.dump(creds_dict, tmp)
