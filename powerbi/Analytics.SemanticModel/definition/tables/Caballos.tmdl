@@ -1,0 +1,49 @@
+table Caballos
+
+	column 'Breed'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Breed
+
+	column 'Gender'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Gender
+
+	column 'Color'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Color
+
+	column 'Price'
+		dataType: double
+		summarizeBy: none
+		sourceColumn: Price
+
+	column 'Age'
+		dataType: double
+		summarizeBy: none
+		sourceColumn: Age
+
+	column 'Location'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Location
+
+	measure KPI_RegistrosCaballos = COUNTROWS(Caballos)
+		formatString: #,0.00
+		displayFolder: Indicadores
+
+	measure KPI_PrecioCaballos = AVERAGE(Caballos[Price])
+		formatString: #,0.00
+		displayFolder: Indicadores
+
+	partition Caballos = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "Caballos.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Headers, {{"Breed", type text}, {"Gender", type text}, {"Color", type text}, {"Price", type number}, {"Age", type number}, {"Location", type text}}, "en-US")
+				in
+				    Typed

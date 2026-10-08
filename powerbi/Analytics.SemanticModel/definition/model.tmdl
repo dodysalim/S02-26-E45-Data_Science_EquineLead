@@ -1,0 +1,11 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+
+ref table Caballos
+ref table Retail
+ref table Usuarios
+ref table SesionesCaballos
+ref table SesionesRetail
+ref expression DataFolder
