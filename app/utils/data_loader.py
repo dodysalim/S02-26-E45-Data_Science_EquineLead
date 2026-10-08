@@ -5,11 +5,13 @@ from typing import List
 import pandas as pd
 import streamlit as st
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 REQUIRED_DATA_FILES = (
-    "horses_listings_limpio.parquet", "products_listing_limpio.parquet",
-    "horses_sessions_info.parquet", "prods_sessions_info.parquet", "users_info.parquet",
+    "horses_listings_limpio.parquet",
+    "products_listing_limpio.parquet",
+    "horses_sessions_info.parquet",
+    "prods_sessions_info.parquet",
+    "users_info.parquet",
 )
 
 

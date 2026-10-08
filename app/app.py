@@ -12,7 +12,11 @@ from modules.conversion_analytics import render_conversion_analytics
 from modules.executive_summary import render_executive_summary
 from modules.horse_analytics import render_horse_analytics
 from modules.retail_analytics import render_retail_analytics
-from utils.data_loader import get_all_dashboard_data, get_data_directory, REQUIRED_DATA_FILES
+from utils.data_loader import (
+    REQUIRED_DATA_FILES,
+    get_all_dashboard_data,
+    get_data_directory,
+)
 from utils.style_utils import inject_premium_style
 
 
@@ -27,7 +31,10 @@ def pull_data():
     try:
         creds_dict = dict(st.secrets["gcp"])
     except (FileNotFoundError, KeyError, st.errors.StreamlitSecretNotFoundError):
-        st.info("Configure las credenciales GCP en Streamlit Secrets o descargue los datos DVC en data/clean o app/data/clean para abrir el dashboard.")
+        st.info(
+            "Configure las credenciales GCP en Streamlit Secrets o descargue los datos "
+            "DVC en data/clean o app/data/clean para abrir el dashboard."
+        )
         st.stop()
 
     tmp = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
@@ -39,19 +46,29 @@ def pull_data():
         result = subprocess.run(
             [sys.executable, "-m", "dvc", "pull", "--remote", "gcsremote"],
             cwd=os.path.abspath(os.path.join(os.path.dirname(__file__), "..")),
-            capture_output=True, text=True, timeout=300,
+            capture_output=True,
+            text=True,
+            timeout=300,
             env={**os.environ, "GOOGLE_APPLICATION_CREDENTIALS": tmp.name},
         )
         if result.returncode != 0:
-            st.error("No se pudieron descargar los datos. Revisa la configuración DVC/GCP.")
+            st.error(
+                "No se pudieron descargar los datos. Revisa la configuración DVC/GCP."
+            )
             st.stop()
         local_data = str(get_data_directory())
         if not all(os.path.isfile(os.path.join(local_data, name)) for name in required):
-            st.error("La descarga no contiene todos los archivos esperados en data/clean o app/data/clean.")
+            st.error(
+                "La descarga no contiene todos los archivos esperados "
+                "en data/clean o app/data/clean."
+            )
             st.stop()
         st.toast("Datos descargados", icon="✅")
     except (OSError, subprocess.TimeoutExpired):
-        st.error("La descarga no terminó. Instala DVC con soporte GCS y revisa el acceso al almacén.")
+        st.error(
+            "La descarga no terminó. Instala DVC con soporte GCS "
+            "y revisa el acceso al almacén."
+        )
         st.stop()
     finally:
         os.unlink(tmp.name)
