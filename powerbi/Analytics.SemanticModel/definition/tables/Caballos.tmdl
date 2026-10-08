@@ -38,6 +38,12 @@ table Caballos
 		formatString: #,0.00
 		displayFolder: Indicadores
 
+	measure KPI_PrecioCaballos_Estado = IF(COUNTROWS(Caballos)=0, "Datos pendientes", FORMAT([KPI_PrecioCaballos], "#,0.00"))
+		formatString: General
+
+	measure KPI_RegistrosCaballos_Estado = IF(COUNTROWS(Caballos)=0, "Datos pendientes", FORMAT([KPI_RegistrosCaballos], "#,0.00"))
+		formatString: General
+
 	partition Caballos = m
 		mode: import
 		source =

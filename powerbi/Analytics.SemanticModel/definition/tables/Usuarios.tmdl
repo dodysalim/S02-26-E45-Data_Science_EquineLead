@@ -39,6 +39,9 @@ table Usuarios
 		formatString: #,0.00
 		displayFolder: Indicadores
 
+	measure KPI_RegistrosUsuarios_Estado = IF(COUNTROWS(Usuarios)=0, "Datos pendientes", FORMAT([KPI_RegistrosUsuarios], "#,0.00"))
+		formatString: General
+
 	partition Usuarios = m
 		mode: import
 		source =

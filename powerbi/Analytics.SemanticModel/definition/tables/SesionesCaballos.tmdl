@@ -19,6 +19,9 @@ table SesionesCaballos
 		formatString: #,0.00
 		displayFolder: Indicadores
 
+	measure KPI_RegistrosSesionesCaballos_Estado = IF(COUNTROWS(SesionesCaballos)=0, "Datos pendientes", FORMAT([KPI_RegistrosSesionesCaballos], "#,0.00"))
+		formatString: General
+
 	partition SesionesCaballos = m
 		mode: import
 		source =

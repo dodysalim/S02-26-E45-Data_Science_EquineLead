@@ -23,6 +23,12 @@ table Retail
 		formatString: #,0.00
 		displayFolder: Indicadores
 
+	measure KPI_RegistrosRetail_Estado = IF(COUNTROWS(Retail)=0, "Datos pendientes", FORMAT([KPI_RegistrosRetail], "#,0.00"))
+		formatString: General
+
+	measure KPI_PrecioRetail_Estado = IF(COUNTROWS(Retail)=0, "Datos pendientes", FORMAT([KPI_PrecioRetail], "#,0.00"))
+		formatString: General
+
 	partition Retail = m
 		mode: import
 		source =

@@ -3,9 +3,9 @@
   "name": "footer",
   "position": {
     "x": 30,
-    "y": 160,
+    "y": 990,
     "z": 3,
-    "height": 80,
+    "height": 42,
     "width": 1220,
     "tabOrder": 3
   },
