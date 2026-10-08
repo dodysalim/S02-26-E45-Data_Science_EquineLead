@@ -3,7 +3,6 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-import os
 import subprocess
 
 import streamlit as st
@@ -13,7 +12,7 @@ from modules.conversion_analytics import render_conversion_analytics
 from modules.executive_summary import render_executive_summary
 from modules.horse_analytics import render_horse_analytics
 from modules.retail_analytics import render_retail_analytics
-from utils.data_loader import get_all_dashboard_data
+from utils.data_loader import get_all_dashboard_data, get_data_directory, REQUIRED_DATA_FILES
 from utils.style_utils import inject_premium_style
 
 
@@ -21,15 +20,14 @@ def pull_data():
     import json
     import tempfile
 
-    local_data = os.path.join(os.path.dirname(__file__), "data", "clean")
-    required = ("horses_listings_limpio.parquet", "products_listing_limpio.parquet",
-                "horses_sessions_info.parquet", "prods_sessions_info.parquet", "users_info.parquet")
+    local_data = str(get_data_directory())
+    required = REQUIRED_DATA_FILES
     if all(os.path.isfile(os.path.join(local_data, name)) for name in required):
         return
     try:
         creds_dict = dict(st.secrets["gcp"])
     except (FileNotFoundError, KeyError, st.errors.StreamlitSecretNotFoundError):
-        st.info("Configure las credenciales GCP en Streamlit Secrets o descargue los datos DVC en app/data/clean para abrir el dashboard.")
+        st.info("Configure las credenciales GCP en Streamlit Secrets o descargue los datos DVC en data/clean o app/data/clean para abrir el dashboard.")
         st.stop()
 
     tmp = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
@@ -37,22 +35,26 @@ def pull_data():
     tmp.flush()
     tmp.close()
 
-    lock_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", ".dvc", "tmp", "lock")
-    )
-    if os.path.exists(lock_path):
-        os.remove(lock_path)
-
-    result = subprocess.run(
-        ["dvc", "pull", "--remote", "gcsremote"],
-        capture_output=True,
-        text=True,
-        env={**os.environ, "GOOGLE_APPLICATION_CREDENTIALS": tmp.name},
-    )
-    if result.returncode != 0:
-        st.error(f"DVC pull failed:\n{result.stderr}")
-    else:
-        st.toast("Data pulled OK ✅", icon="✅")
+    try:
+        result = subprocess.run(
+            [sys.executable, "-m", "dvc", "pull", "--remote", "gcsremote"],
+            cwd=os.path.abspath(os.path.join(os.path.dirname(__file__), "..")),
+            capture_output=True, text=True, timeout=300,
+            env={**os.environ, "GOOGLE_APPLICATION_CREDENTIALS": tmp.name},
+        )
+        if result.returncode != 0:
+            st.error("No se pudieron descargar los datos. Revisa la configuración DVC/GCP.")
+            st.stop()
+        local_data = str(get_data_directory())
+        if not all(os.path.isfile(os.path.join(local_data, name)) for name in required):
+            st.error("La descarga no contiene todos los archivos esperados en data/clean o app/data/clean.")
+            st.stop()
+        st.toast("Datos descargados", icon="✅")
+    except (OSError, subprocess.TimeoutExpired):
+        st.error("La descarga no terminó. Instala DVC con soporte GCS y revisa el acceso al almacén.")
+        st.stop()
+    finally:
+        os.unlink(tmp.name)
 
 
 if "data_pulled" not in st.session_state:
@@ -107,9 +109,9 @@ page = st.sidebar.radio(
 )
 
 st.sidebar.markdown("---")
-st.sidebar.caption("System Status: **ONLINE**")
-st.sidebar.caption("Latency: **Optimized**")
-st.sidebar.caption("Architecture: **Modularized**")
+st.sidebar.caption("Fuente: archivos Parquet cargados")
+st.sidebar.caption("Sesiones: muestra de hasta 10.000 filas por tabla")
+st.sidebar.caption("No Country · Equipo 45")
 
 # ---------------------------------------------
 # 4. ROUTING & RENDERING

@@ -1,69 +1,31 @@
 import os
-from typing import List, Tuple
+from pathlib import Path
+from typing import List
 
-import numpy as np
 import pandas as pd
 import streamlit as st
 
 
-def generate_mock_data() -> Tuple[
-    pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame
-]:
-    """Generates professional mock data if parquets are missing."""
-    np.random.seed(42)
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+REQUIRED_DATA_FILES = (
+    "horses_listings_limpio.parquet", "products_listing_limpio.parquet",
+    "horses_sessions_info.parquet", "prods_sessions_info.parquet", "users_info.parquet",
+)
 
-    # Mock Listings
-    n = 5000
-    df_horses = pd.DataFrame(
-        {
-            "Breed": np.random.choice(["Quarter Horse", "Thoroughbred", "Arabian"], n),
-            "Gender": np.random.choice(["Stallion", "Mare", "Gelding"], n),
-            "Color": np.random.choice(["Bay", "Grey", "Black"], n),
-            "Price": np.random.lognormal(mean=9, sigma=1, size=n).clip(1000, 150000),
-            "Age": np.random.normal(loc=8, scale=3, size=n).clip(1, 25).astype(int),
-            "Location": np.random.choice(
-                ["Florida, USA", "Kentucky, USA", "Berlin, Germany"], n
-            ),
-        }
-    )
 
-    df_products = pd.DataFrame(
-        {
-            "Category": np.random.choice(["Saddles", "Bridles", "Boots"], n),
-            "Price": np.random.uniform(50, 500, n),
-            "Stock": np.random.randint(0, 100, n),
-        }
-    )
-
-    df_users = pd.DataFrame(
-        {
-            "first_seen": pd.date_range(start="2024-01-01", periods=n, freq="H"),
-            "country": np.random.choice(["USA", "Germany", "Netherlands"], n),
-            "city": np.random.choice(["Miami", "Berlin", "Amsterdam"], n),
-            "traffic_source": np.random.choice(["organic", "paid", "referral"], n),
-            "gender": np.random.choice(["M", "F", "O"], n),
-            "device_type": np.random.choice(["Mobile", "Desktop", "Tablet"], n),
-            "job_info": "Professional",
-        }
-    )
-
-    df_u_sessions = pd.DataFrame(
-        {
-            "event_time": pd.date_range(start="2024-01-01", periods=n, freq="15min"),
-            "event_type": np.random.choice(["view", "cart", "purchase"], n),
-            "horse_id": np.random.randint(1, 1000, n),
-        }
-    )
-
-    df_p_sessions = pd.DataFrame(
-        {
-            "event_time": pd.date_range(start="2024-01-01", periods=n, freq="15min"),
-            "event_type": np.random.choice(["view", "cart", "purchase"], n),
-            "item_id": np.random.randint(1, 1000, n),
-        }
-    )
-
-    return df_horses, df_products, df_users, df_u_sessions, df_p_sessions
+def get_data_directory() -> Path:
+    """Support both manual app snapshots and the repository's DVC output."""
+    configured = os.getenv("EQUINE_DATA_DIR")
+    if configured:
+        return Path(configured).expanduser().resolve()
+    candidates = [PROJECT_ROOT / "app/data/clean", PROJECT_ROOT / "data/clean"]
+    for folder in candidates:
+        if all((folder / name).is_file() for name in REQUIRED_DATA_FILES):
+            return folder
+    for folder in candidates:
+        if any((folder / name).is_file() for name in REQUIRED_DATA_FILES):
+            return folder
+    return candidates[0]
 
 
 @st.cache_data(show_spinner=False)
@@ -72,9 +34,7 @@ def load_data(
 ) -> pd.DataFrame:
     """Optimized data loader with column pruning and cloud-safe engine settings."""
     # Data directory relative to this file
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.abspath(os.path.join(current_dir, "..", "..", "data", "clean"))
-    path = os.path.join(data_dir, filename)
+    path = get_data_directory() / filename
 
     if os.path.exists(path):
         try:
@@ -145,8 +105,6 @@ def get_all_dashboard_data():
                 lambda x: x.get("title") if isinstance(x, dict) else x
             )
 
-        # Fallback to mock only if CRITICAL tables are empty (Horses or Users)
-        # Session data is allowed to be empty to prevent global mock fallback
         # Diagnostic for empty sessions (Only if Users/Horses are NOT empty)
         if df_u_sessions.empty and not df_users.empty:
             st.sidebar.info("Note: Horse Session data is empty or filtered.")
