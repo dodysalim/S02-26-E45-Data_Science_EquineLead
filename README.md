@@ -6,7 +6,7 @@
 
 NO COUNTRY · EQUIPO 45 · Python · Parquet · Streamlit · XGBoost
 
-[Portafolio](https://dodysalim.github.io/) · [Caso y alcance](docs/PORTFOLIO_CASE.md) · [Verificación](docs/VALIDATION.md)
+[No Country Showcase](https://nocountry.tech/showcase/simulacion-laboral-febrero-2026/equipo-45-data-science) · [Portafolio](https://dodysalim.github.io/) · [Caso y alcance](docs/PORTFOLIO_CASE.md) · [Verificación](docs/VALIDATION.md)
 
 ## La pregunta
 
@@ -62,12 +62,12 @@ No se reentrenaron los modelos ni se validó la API remota, GCP, DagsHub o la de
 
 No Country S02-26-E45. Rol documentado de Dody Dueñas: Data Analyst; arquitectura y modelos son trabajo colectivo.
 
-| Nombre | Rol | LinkedIn |
-|--------|-----|----------|
-| **Alexander Rios** | Data Scientist & ML Engineer | [linkedin.com/in/alexander-daniel-rios](https://www.linkedin.com/in/alexander-daniel-rios/) |
-| **Daisy Quinteros** | Data Engineer & Data Scientist | [linkedin.com/in/daisy-quinteros-silva-5b0450a5](https://www.linkedin.com/in/daisy-quinteros-silva-5b0450a5) |
-| **Iñaki Rosello** | Data Scientist & ML Engineer | [linkedin.com/in/iñakirosellosignoris](https://www.linkedin.com/in/iñakirosellosignoris) |
-| **Dody Dueñas** | Data Analyst | [linkedin.com/in/dody-dueñas-remache-079164296](https://www.linkedin.com/in/dody-dueñas-remache-079164296/) |
+| Nombre | Rol |
+| --- | --- |
+| **Alexander Rios** | Data Scientist & ML Engineer |
+| **Daisy Quinteros** | Data Engineer & Data Scientist |
+| **Iñaki Rosello** | Data Scientist & ML Engineer |
+| **Dody Dueñas** | Data Analyst |
 
 
 [Documentación anterior](docs/ORIGINAL_README.md), conservada como referencia histórica.
