@@ -10,4 +10,3 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y [
 - `.env` con valores de ejemplo pasa a `.env.example` y `.env` queda excluido de Git, para que nadie suba credenciales reales por accidente.
 - Verificación: 3 pruebas de rutas y lectura Parquet aprobadas; el dashboard arranca sin credenciales y muestra las instrucciones de datos.
 - README con insignias de CI y versión.
-
