@@ -1,2 +1,0 @@
-expression DataFolder = "C:\Dody-PowerBI\S02-26-E45-Data_Science_EquineLead\powerbi\data\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
-	kind: m
