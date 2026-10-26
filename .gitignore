@@ -31,3 +31,13 @@ data/raw/
 .dvc/config.local
 
 models/
+
+# Credenciales locales (copiar desde .env.example)
+.env
+
+# Mantenimiento
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+Thumbs.db
+*.log
