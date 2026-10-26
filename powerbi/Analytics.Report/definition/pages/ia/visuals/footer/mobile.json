@@ -1,0 +1,33 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainerMobileState/2.4.0/schema.json",
+  "position": {
+    "x": 0,
+    "y": 120,
+    "z": 1,
+    "width": 323,
+    "height": 140,
+    "tabOrder": 1
+  },
+  "objects": {
+    "general": [
+      {
+        "properties": {
+          "paragraphs": [
+            {
+              "textRuns": [
+                {
+                  "value": "Para utilizar IA abre la aplicación original. No hay predicciones exportadas; no se fabrican resultados.",
+                  "textStyle": {
+                    "fontFamily": "Segoe UI",
+                    "fontSize": "10pt",
+                    "color": "#52677D"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

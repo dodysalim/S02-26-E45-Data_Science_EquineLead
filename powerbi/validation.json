@@ -1,0 +1,13 @@
+{
+  "repo": "S02-26-E45-Data_Science_EquineLead",
+  "pages": 6,
+  "visuals": 44,
+  "tables": {
+    "Caballos": 0,
+    "Retail": 0,
+    "Usuarios": 0,
+    "SesionesCaballos": 0,
+    "SesionesRetail": 0
+  },
+  "status": "PENDIENTE DE DATOS · archivos Parquet de DVC/GCP ausentes · ninguna métrica usa mock data"
+}
