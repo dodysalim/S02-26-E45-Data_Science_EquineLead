@@ -16,7 +16,7 @@
 <a href="https://github.com/dodysalim/S02-26-E45-Data_Science_EquineLead/actions"><img src="https://github.com/dodysalim/S02-26-E45-Data_Science_EquineLead/actions/workflows/local-tests.yml/badge.svg" alt="CI"></a> <img src="https://img.shields.io/badge/versión-1.1.0-8F7BFF?style=flat-square" alt="Versión 1.1.0"> <img src="https://img.shields.io/badge/licencia-MIT-30405B?style=flat-square" alt="Licencia MIT">
 </p>
 
-<p align="center"><a href="https://nocountry.tech/showcase/simulacion-laboral-febrero-2026/equipo-45-data-science"><b>🏆 Showcase No Country</b></a> · <a href="https://dodysalim.github.io/"><b>🌐 Portafolio</b></a> · <a href="docs/PORTFOLIO_CASE.md"><b>📄 Caso de estudio</b></a></p>
+<p align="center"><a href="https://nocountry.tech/showcase/simulacion-laboral-febrero-2026/equipo-45-data-science"><b>🏆 Showcase No Country</b></a> · <a href="https://dodysalim.github.io/"><b>🌐 Portafolio</b></a> · <a href="docs/PORTFOLIO_CASE.md"><b>📄 Caso de estudio</b></a> · <a href="README.en.md"><b>🇺🇸 English</b></a></p>
 
 ---
 
@@ -39,6 +39,19 @@
 - Seis vistas de inventario, retail, audiencia, conversión y subsistema de IA.
 - Carga de Parquet con selección de columnas y límites para sesiones.
 - Pipeline y servicios de ML del equipo; versionado de datos con DVC.
+
+## 🏗️ Arquitectura
+
+```mermaid
+flowchart LR
+    SRC[Sitios ecuestres] --> SCR[scraping] --> CLN[cleaning]
+    SYN[synthetizing<br/>tracking de usuarios] --> DVC
+    CLN --> DVC[(Parquet + DVC)]
+    DVC --> EXP[experiments<br/>XGBoost leads] --> REG[registry<br/>MLflow / DagsHub]
+    REG --> API[API FastAPI]
+    DVC --> APP[Dashboard Streamlit<br/>6 vistas]
+    REG --> APP
+```
 
 ## 🚀 Cómo ejecutarlo
 
